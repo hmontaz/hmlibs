@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/hmlinq/.vs
+/hmlinq/hmlinq/bin
+/hmlinq/hmlinq/obj
+/hmlinq/hmlinqTests/bin
+/hmlinq/hmlinqTests/obj
