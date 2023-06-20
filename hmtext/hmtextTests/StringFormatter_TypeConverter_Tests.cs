@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace hmlib.Tests.UtilitiesTests.StringTools
+namespace hmlib.Tests.Utilities.StringTools
 {
-	[TestClass]
 	public class StringFormatter_TypeConverter_Tests
 	{
 		class T

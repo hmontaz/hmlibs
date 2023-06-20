@@ -183,7 +183,7 @@ namespace hmlib.Tests.Utilities.StringTools
 		public void Cast_From_Double_Test()
 		{
 			Assert.Equal("15", ((Int32)15.75).ToString());
-			Assert.Equal("15", StringFormatter.TryUnbox(15.75, typeof(Int32)).ToString());
+			Assert.Equal("15", StringFormatter.Context.TryUnbox(15.75, typeof(Int32)).ToString());
 
 			Assert.Equal("15", StringFormatter.Format("{(System.Int16)0}", 15.75));
 			Assert.Equal("15", StringFormatter.Format("{(System.Int32)0}", 15.75));

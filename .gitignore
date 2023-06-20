@@ -12,3 +12,7 @@
 /hmtext/hmtext/bin
 /hmtext/hmtextTests/bin
 /hmtext/hmtextTests/obj
+/hmjslibs/clock/.vs/clock
+/hmjslibs/clock/packages
+/hmjslibs/clock/JSClockLibrary/bin
+/hmjslibs/clock/JSClockLibrary/obj

@@ -10,20 +10,20 @@ namespace hmlib
 {
 	public partial class StringFormatter
 	{
-		internal class FormatData
+		internal class Context
 		{
-			readonly StringFormatterOptions _options;
-			readonly public string Format;
+			internal readonly StringFormatterOptions Options;
+			internal readonly string Format;
 
 			/// <summary>
 			/// Translated Arguments
 			/// </summary>
-			readonly public object[] Args;
+			internal readonly object[] Args;
 
-			public FormatData(StringFormatterOptions options, Item[] items, object[] args)
+			public Context(StringFormatterOptions options, Item[] items, object[] args)
 			{
 				var list = new List<string>();
-				_options = options;
+				Options = options;
 				var temp_args = new List<object>();
 				for (var i = 0; i < items.Length; i++)
 				{
@@ -43,18 +43,12 @@ namespace hmlib
 					}
 					else
 					{
-						value = FormatData.Eval(args[item.Index], _options, item.PropertyNames);
+						value = Context.Eval(args[item.Index], Options, item.PropertyNames);
 					}
 
 					if (item.Type != null)
 					{
 						value = ConvertTo(value, item.Type);
-						//if (options.TypeConverter != null)
-						//{
-						//	value = options.TryConvertTo(value, item.Type, null);
-						//}
-						//else
-						//	value = ChangeType(value, item.Type);
 					}
 					temp_args.Add(value);
 				}
@@ -65,20 +59,20 @@ namespace hmlib
 			internal object ConvertTo(object value, Type destinationType)
 			{
 				if (value == null) return value;
-				if (this._options.TypeConverter != null
-					&& this._options.TypeConverter.CanConvertFrom(value.GetType())
-					&& this._options.TypeConverter.CanConvertTo(destinationType))
+				if (this.Options.TypeConverter != null
+					&& this.Options.TypeConverter.CanConvertFrom(value.GetType())
+					&& this.Options.TypeConverter.CanConvertTo(destinationType))
 				{
-					return this._options.TypeConverter.ConvertTo(value, destinationType);
+					return this.Options.TypeConverter.ConvertTo(value, destinationType);
 				}
-				value = StringFormatter.TryUnbox(value, destinationType);
+				value = Context.TryUnbox(value, destinationType);
 				return Convert.ChangeType(value, destinationType);
 			}
 
-			internal static FormatData Translate(StringFormatterOptions options, string format, params object[] args)
+			internal static Context Translate(StringFormatterOptions options, string format, params object[] args)
 			{
 				var items = Item.Parse(format);
-				return new FormatData(options, items, args);
+				return new Context(options, items, args);
 			}
 
 			internal static object Eval(object obj, StringFormatterOptions options, string[] memberNames)
@@ -110,9 +104,31 @@ namespace hmlib
 				//-----------
 				if (memberNames.Length == 1) return value;
 				//-----------
-				return FormatData.Eval(value, options, memberNames.Skip(1).ToArray());
+				return Context.Eval(value, options, memberNames.Skip(1).ToArray());
 			}
 
+			internal static object TryUnbox(object value, Type type)
+			{
+				if (value is Double)
+				{
+					if (type == typeof(Int16)) return (Int16)(Double)value;
+					if (type == typeof(Int32)) return (Int32)(Double)value;
+					if (type == typeof(Int64)) return (Int64)(Double)value;
+					if (type == typeof(UInt16)) return (UInt16)(Double)value;
+					if (type == typeof(UInt32)) return (UInt32)(Double)value;
+					if (type == typeof(UInt64)) return (UInt64)(Double)value;
+				}
+				if (value is Single)
+				{
+					if (type == typeof(Int16)) return (Int16)(Single)value;
+					if (type == typeof(Int32)) return (Int32)(Single)value;
+					if (type == typeof(Int64)) return (Int64)(Single)value;
+					if (type == typeof(UInt16)) return (UInt16)(Single)value;
+					if (type == typeof(UInt32)) return (UInt32)(Single)value;
+					if (type == typeof(UInt64)) return (UInt64)(Single)value;
+				}
+				return value;
+			}
 		}
 	}
 }

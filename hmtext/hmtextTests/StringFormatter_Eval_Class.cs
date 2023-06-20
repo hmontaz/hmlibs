@@ -1,9 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace hmlib.Tests.UtilitiesTests.StringTools
+﻿namespace hmlib.Tests.Utilities.StringTools
 {
-	[TestClass]
 	public class StringFormatter_Eval_Class
 	{
 		public class test
@@ -14,14 +10,14 @@ namespace hmlib.Tests.UtilitiesTests.StringTools
 
 
 		}
-		[TestMethod]
+		[Fact]
 		public void TestMethod1()
 		{
 			var o = new test();
 
-			Assert.AreEqual(1, StringFormatter.Eval(o, "_Int32"));
-			Assert.AreEqual("hello", StringFormatter.Eval(o, "_String"));
-			Assert.AreEqual(true, StringFormatter.Eval(o, "_Boolean"));
+			Assert.Equal(1, StringFormatter.Eval(o, "_Int32"));
+			Assert.Equal("hello", StringFormatter.Eval(o, "_String"));
+			Assert.Equal(true, StringFormatter.Eval(o, "_Boolean"));
 
 		}
 	}

@@ -10,8 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="StringFormatter_Eval_Class.cs" />
-    <Compile Remove="StringFormatter_Eval_Dynamic.cs" />
     <Compile Remove="StringFormatter_TypeConverter_Tests.cs" />
   </ItemGroup>
 

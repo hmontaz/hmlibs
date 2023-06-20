@@ -1,0 +1,15 @@
+[
+	{
+		"outputFileName": "resources/AnalogClock.js",
+		"minify": { "enabled": true },
+		"inputFiles": [
+			"resources/scripts/AnalogClock.js",
+			"resources/scripts/clock-1.js",
+			"resources/scripts/clock-2.js",
+			"resources/scripts/clock-3.js",
+			"resources/scripts/clock-4.js",
+			"resources/scripts/clock-5.js",
+			"resources/scripts/clock-6.js"
+		]
+	}
+]
