@@ -16,3 +16,8 @@
 /hmjslibs/clock/packages
 /hmjslibs/clock/JSClockLibrary/bin
 /hmjslibs/clock/JSClockLibrary/obj
+/hmlib/hmlib.Tests/bin
+/hmlib/hmlib.Tests/obj
+/hmlib/hmlib/bin
+/hmlib/hmlib/obj
+/hmlib/hmlib.Text/bin/Debug
