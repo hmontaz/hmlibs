@@ -2,22 +2,7 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/hmlinq/.vs
-/hmlinq/hmlinq/bin
-/hmlinq/hmlinq/obj
-/hmlinq/hmlinqTests/bin
-/hmlinq/hmlinqTests/obj
-/hmtext/.vs
-/hmtext/hmtext/obj
-/hmtext/hmtext/bin
-/hmtext/hmtextTests/bin
-/hmtext/hmtextTests/obj
-/hmjslibs/clock/.vs/clock
+.vs
+bin
+obj
 /hmjslibs/clock/packages
-/hmjslibs/clock/JSClockLibrary/bin
-/hmjslibs/clock/JSClockLibrary/obj
-/hmlib/hmlib.Tests/bin
-/hmlib/hmlib.Tests/obj
-/hmlib/hmlib/bin
-/hmlib/hmlib/obj
-/hmlib/hmlib.Text/bin/Debug

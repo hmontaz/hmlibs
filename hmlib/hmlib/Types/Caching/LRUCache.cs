@@ -9,11 +9,13 @@ namespace hmlib.Types.Caching
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
-	public class LRUCache<TKey, TValue>
+	public class LRUCache<TKey, TValue> : IDisposable
 	{
 		Dictionary<TKey, LinkedListNode<(TKey key, TValue value)>> _cache;
 		LinkedList<(TKey key, TValue value)> _list;
 		int _capacity;
+		private bool _disposed = false;
+		object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the LRUCache with a specified capacity.
@@ -33,13 +35,16 @@ namespace hmlib.Types.Caching
 		/// <returns>The value associated with the key, or default(TValue) if not found.</returns>
 		public TValue Get(TKey key)
 		{
-			if (!_cache.ContainsKey(key)) return default(TValue);
+			lock (_lock)
+			{
+				ThrowIfDisposed();
+				if (!_cache.ContainsKey(key)) return default(TValue);
+				var node = _cache[key];
+				_list.Remove(node);
+				_list.AddLast(node);
 
-			var node = _cache[key];
-			_list.Remove(node);
-			_list.AddLast(node);
-
-			return node.Value.value;
+				return node.Value.value;
+			}
 		}
 
 		/// <summary>
@@ -47,24 +52,28 @@ namespace hmlib.Types.Caching
 		/// </summary>
 		/// <param name="key">The key of the item.</param>
 		/// <param name="value">The value of the item.</param>
-		public void Put(TKey key, TValue value)
+		public void CreateEntry(TKey key, TValue value)
 		{
-			if (_cache.ContainsKey(key))
+			lock (_lock)
 			{
-				var node = _cache[key];
-				_list.Remove(node);
-			}
-			else
-			{
-				if (_capacity == _list.Count)
+				ThrowIfDisposed();
+				if (_cache.ContainsKey(key))
 				{
-					var n = _list.First;
-					_list.Remove(n);
-					_cache.Remove(n.Value.key);
+					var node = _cache[key];
+					_list.Remove(node);
 				}
+				else
+				{
+					if (_capacity == _list.Count)
+					{
+						var n = _list.First;
+						_list.Remove(n);
+						_cache.Remove(n.Value.key);
+					}
+				}
+				var newNode = _list.AddLast((key, value));
+				_cache[key] = newNode;
 			}
-			var newNode = _list.AddLast((key, value));
-			_cache[key] = newNode;
 		}
 
 		/// <summary>
@@ -72,8 +81,48 @@ namespace hmlib.Types.Caching
 		/// </summary>
 		public void Clear()
 		{
-			_cache.Clear();
-			_list.Clear();
+			lock (_lock)
+			{
+				ThrowIfDisposed();
+				_cache.Clear();
+				_list.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Disposes the cache by clearing all stored entries.
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this); // Prevent finalizer from running
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed)
+				return;
+
+			if (disposing)
+			{
+				// Free managed resources
+				Clear();
+			}
+
+			// Free unmanaged resources here if you had any
+
+			_disposed = true;
+		}
+
+		// Optional: Only needed if you ever add unmanaged resources
+		~LRUCache()
+		{
+			Dispose(false);
+		}
+
+		private void ThrowIfDisposed()
+		{
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(LRUCache<TKey, TValue>));
 		}
 	}
 }
